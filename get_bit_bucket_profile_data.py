@@ -33,7 +33,7 @@ class GetBitBucketProfileData:
         bit_bucket_profile = {
             'public_repos_count': {
                 'original': len(repos_response['values']),
-                'forked': -1,
+                'forked': 0, # TODO
             },
             'followers_count': len(folowers_response['values']),
             'open_issues_count': open_issues_count,
