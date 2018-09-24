@@ -25,7 +25,7 @@ class GetBitBucketProfileData:
                 open_issues_count += len(issues_response['values'])
             total_size += repo['size']
             if repo['language']:
-                languages.append(repo['language'])
+                languages.append(repo['language'].lower())
         languages = list(set(languages))
         # TODO:
         # Figure out original vs forked repos for the 2.0 version of the API. So far, I have not found a way to figure out

@@ -27,7 +27,7 @@ class GetGitHubProfileData:
             open_issues_count += repo['open_issues_count']
             total_size += repo['size']
             if repo['language']:
-                languages.append(repo['language'])
+                languages.append(repo['language'].lower())
             # TODO:
             # topics.append(repo['topics'])
             if repo['fork']:
