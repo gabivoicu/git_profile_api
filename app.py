@@ -3,6 +3,10 @@ import requests
 from flask import Flask
 from flask_restful import reqparse, Resource, Api
 
+from get_bit_bucket_profile_data import GetBitBucketProfileData
+from get_git_hub_profile_data import GetGitHubProfileData
+from merge_git_profiles import MergeGitProfiles
+
 app = Flask(__name__)
 api = Api(app)
 
@@ -24,9 +28,9 @@ class GitProfile(Resource):
         github_username, bitbucket_username = self.get_usernames()
         if (github_username == None) or (bitbucket_username == None):
             return { 'message': 'A merged user profile could not be returned. Please provide a github_username and a bitbucket_username key.'}, 400
-        github_response = requests.get('https://api.github.com/users/gabivoicu')
-        bitbucket_response = requests.get('https://api.bitbucket.org/1.0/users/muntzen')
-        return bitbucket_response.json()
+        git_hub_data = GetGitHubProfileData().call(github_username)
+        bit_bucket_data = GetBitBucketProfileData().call(bitbucket_username)
+        return MergeGitProfiles().call(git_hub_data, bit_bucket_data)
 
     def get_usernames(self):
         """Get the git usernames.
