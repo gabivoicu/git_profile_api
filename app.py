@@ -28,8 +28,11 @@ class GitProfile(Resource):
         github_username, bitbucket_username = self.get_usernames()
         if (github_username == None) or (bitbucket_username == None):
             return { 'message': 'A merged user profile could not be returned. Please provide a github_username and a bitbucket_username key.'}, 400
-        git_hub_data = GetGitHubProfileData().call(github_username)
-        bit_bucket_data = GetBitBucketProfileData().call(bitbucket_username)
+        try:
+            git_hub_data = GetGitHubProfileData().call(github_username)
+            bit_bucket_data = GetBitBucketProfileData().call(bitbucket_username)
+        except:
+            return { "message": "A merged profile could not be generated for the two usernames. Please check that you typed them right."}
         return MergeGitProfiles().call(git_hub_data, bit_bucket_data)
 
     def get_usernames(self):

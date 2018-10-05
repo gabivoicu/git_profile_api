@@ -34,10 +34,6 @@ the GitHub GraphQL might have this information but that would potentially requir
 - Pagination: Due to time constraints, I have so far coded the absolute happy path. Pagination has been ignored entirely. To add pagination,
 look up which of the endpoints support pagination and update calls to those endpoints to be made untill all the data has been read.
 
-- Error handling: Due to time constraints the only part of the code that has good checking of bad values is the reading of the git
-usernames from the query strings. Error handling is needed for the `GetGitHubProfileData` and `GetBitBucketProfileData` classes to handle the
-cases where the APIs might be down or return errors for the usernames submitted.
-
 - Forked repos in BitBucket: on the repositories call it is unclear wether a repo is original or a fork. I have searched the BitBucket documentation far and wide and could not figure out a spot where that information is available. One potential hypothesis is that the 2.0 version of the API does not show that information _yet_ (this based on a support ticket I came across). This is a little strange because 2.0 is the current version and 1.0 is deprecated/in the process of being retired entirely.
 
 - Languages used in GitHub: Due to time constraints the languages aggregated for the GitHub profile are just the top languages returned on the repositories call. To get all languages, a new call will need to be made for each repo.

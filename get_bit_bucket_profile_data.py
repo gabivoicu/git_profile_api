@@ -15,11 +15,13 @@ class GetBitBucketProfileData:
 
         Use data to return a JSON object in format needed for the merged profile.
         """
-        repos_response = requests.get(BIT_BUCKET_API_REPOS_URL.format(username)).json()
-        folowers_response = requests.get(BIT_BUCKET_API_FOLLOWERS_URL.format(username)).json()
+        repos_response = requests.get(BIT_BUCKET_API_REPOS_URL.format(username))
+        repos_response.raise_for_status()
+        folowers_response = requests.get(BIT_BUCKET_API_FOLLOWERS_URL.format(username))
+        folowers_response.raise_for_status()
         languages = []
         open_issues_count, total_size = 0, 0
-        for repo in repos_response['values']:
+        for repo in repos_response.json()['values']:
             if repo['has_issues']:
                 issues_response = requests.get(repo['links']['issues']['href']).json()
                 open_issues_count += len(issues_response['values'])
@@ -32,10 +34,10 @@ class GetBitBucketProfileData:
         # if a give repo is a fork or original based on the info returned on BIT_BUCKET_API_REPOS_URL.
         bit_bucket_profile = {
             'public_repos_count': {
-                'original': len(repos_response['values']),
+                'original': len(repos_response.json()['values']),
                 'forked': 0, # TODO
             },
-            'followers_count': len(folowers_response['values']),
+            'followers_count': len(folowers_response.json()['values']),
             'open_issues_count': open_issues_count,
             'original_repo_commits_count': -1, # TODO
             'size_of_account': total_size,

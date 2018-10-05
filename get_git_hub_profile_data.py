@@ -16,13 +16,16 @@ class GetGitHubProfileData:
 
         Use data to return a JSON object in format needed for the merged profile.
         """
-        profile_response = requests.get(GIT_HUB_API_USER_URL.format(username)).json()
-        repos_response = requests.get(GIT_HUB_API_REPOS_URL.format(username)).json()
-        starred_response = requests.get(GIT_HUB_API_STARRED_URL.format(username)).json()
+        profile_response = requests.get(GIT_HUB_API_USER_URL.format(username))
+        profile_response.raise_for_status()
+        repos_response = requests.get(GIT_HUB_API_REPOS_URL.format(username))
+        repos_response.raise_for_status()
+        starred_response = requests.get(GIT_HUB_API_STARRED_URL.format(username))
+        starred_response.raise_for_status()
         languages, topics = [], []
         stars_received_count, open_issues_count, total_size, = 0, 0, 0
         original_repo_count, forked_repo_count = 0, 0
-        for repo in repos_response:
+        for repo in repos_response.json():
             stars_received_count += repo['stargazers_count']
             open_issues_count += repo['open_issues_count']
             total_size += repo['size']
@@ -42,9 +45,9 @@ class GetGitHubProfileData:
                 'original': original_repo_count,
                 'forked': forked_repo_count,
             },
-            'followers_count': profile_response['followers'],
+            'followers_count': profile_response.json()['followers'],
             'stars_received_count': stars_received_count,
-            'stars_given_count': len(starred_response),
+            'stars_given_count': len(starred_response.json()),
             'open_issues_count': open_issues_count,
             'original_repo_commits_count': -1, # TODO
             'size_of_account': total_size,
